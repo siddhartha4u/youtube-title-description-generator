@@ -20,6 +20,13 @@
         // Main application logic for the YouTube Title & Description Generator
         document.addEventListener('DOMContentLoaded', () => {
             const app = document.getElementById('app');
+            
+            // === YOUR API KEY GOES HERE ===
+            // 1. Get your key from https://ai.google.dev/
+            // 2. Paste it in the quotes below. Do not share your key!
+            const apiKey = "AIzaSyDV3LEWbrgzehnlf5dkFHi7LHB-kNKz-mk";
+            // ==============================
+
             let step = 'titles';
             let primaryKeyword = '';
             let secondaryKeywords = ['', '', '', '', ''];
@@ -253,6 +260,13 @@
                 const maxRetries = 5;
                 let delay = 1000;
 
+                if (!apiKey) {
+                    error = 'API Key is missing. Please add your key to the code to proceed.';
+                    loading = false;
+                    render();
+                    return;
+                }
+
                 for (let i = 0; i < maxRetries; i++) {
                     try {
                         const prompt = `
@@ -281,7 +295,6 @@
                                 }
                             }
                         };
-                        const apiKey = "AIzaSyDV3LEWbrgzehnlf5dkFHi7LHB-kNKz-mk";
                         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
 
                         const response = await fetch(apiUrl, {
@@ -334,6 +347,13 @@
                 const maxRetries = 5;
                 let delay = 1000;
                 const filteredSecondaryKeywords = secondaryKeywords.filter(k => k.trim() !== '');
+                
+                if (!apiKey) {
+                    error = 'API Key is missing. Please add your key to the code to proceed.';
+                    loading = false;
+                    render();
+                    return;
+                }
 
                 for (let i = 0; i < maxRetries; i++) {
                     try {
@@ -354,7 +374,6 @@
                                 }
                             }
                         };
-                        const apiKey = "AIzaSyDV3LEWbrgzehnlf5dkFHi7LHB-kNKz-mk";
                         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
 
                         const response = await fetch(apiUrl, {
