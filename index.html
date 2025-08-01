@@ -270,7 +270,7 @@
                 for (let i = 0; i < maxRetries; i++) {
                     try {
                         const prompt = `
-                            Generate a JSON object with a "titles" array containing 10 creative and effective YouTube titles. Each title must:
+                            Generate a JSON array containing 10 creative and effective YouTube titles. Each title must:
                             - Be under 70 characters long.
                             - Include the exact primary keyword: "${primaryKeyword}".
                             - Have a strong hook.
@@ -278,20 +278,14 @@
                             - Contain at least one relevant emoji.
                             - Include some text within brackets, like [Tutorial], (2024), or [LIVE].
                         `;
-
                         const chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
                         const payload = {
                             contents: chatHistory,
                             generationConfig: {
                                 responseMimeType: "application/json",
                                 responseSchema: {
-                                    type: "OBJECT",
-                                    properties: {
-                                        titles: {
-                                            type: "ARRAY",
-                                            items: { type: "STRING" }
-                                        }
-                                    }
+                                    type: "ARRAY",
+                                    items: { type: "STRING" }
                                 }
                             }
                         };
@@ -311,8 +305,8 @@
                         const jsonText = result?.candidates?.[0]?.content?.parts?.[0]?.text;
                         if (jsonText) {
                             const parsedJson = JSON.parse(jsonText);
-                            if (parsedJson.titles && Array.isArray(parsedJson.titles)) {
-                                titles = parsedJson.titles;
+                            if (Array.isArray(parsedJson)) {
+                                titles = parsedJson;
                                 break;
                             }
                         }
