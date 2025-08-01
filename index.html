@@ -260,7 +260,7 @@
                 const maxRetries = 5;
                 let delay = 1000;
 
-                if (!apiKey) {
+                if (!apiKey || apiKey === "PASTE_YOUR_API_KEY_HERE") {
                     error = 'API Key is missing. Please add your key to the code to proceed.';
                     loading = false;
                     render();
@@ -284,8 +284,13 @@
                             generationConfig: {
                                 responseMimeType: "application/json",
                                 responseSchema: {
-                                    type: "ARRAY",
-                                    items: { type: "STRING" }
+                                    type: "OBJECT",
+                                    properties: {
+                                        titles: {
+                                            type: "ARRAY",
+                                            items: { type: "STRING" }
+                                        }
+                                    }
                                 }
                             }
                         };
@@ -305,8 +310,8 @@
                         const jsonText = result?.candidates?.[0]?.content?.parts?.[0]?.text;
                         if (jsonText) {
                             const parsedJson = JSON.parse(jsonText);
-                            if (Array.isArray(parsedJson)) {
-                                titles = parsedJson;
+                            if (parsedJson.titles && Array.isArray(parsedJson.titles)) {
+                                titles = parsedJson.titles;
                                 break;
                             }
                         }
@@ -342,7 +347,7 @@
                 let delay = 1000;
                 const filteredSecondaryKeywords = secondaryKeywords.filter(k => k.trim() !== '');
                 
-                if (!apiKey) {
+                if (!apiKey || apiKey === "PASTE_YOUR_API_KEY_HERE") {
                     error = 'API Key is missing. Please add your key to the code to proceed.';
                     loading = false;
                     render();
@@ -352,7 +357,7 @@
                 for (let i = 0; i < maxRetries; i++) {
                     try {
                         const prompt = `
-                            Generate a JSON array containing 5 different YouTube video description ideas for the following title: "${selectedTitle}".
+                            Generate a JSON object with a "descriptions" array containing 5 different YouTube video description ideas for the following title: "${selectedTitle}".
                             Each description must be under 120 words long. It must incorporate the primary keyword "${primaryKeyword}" and also use the following secondary keywords: ${filteredSecondaryKeywords.join(', ')}.
                             Each description should be a few sentences long, include relevant hashtags, and provide a clear call-to-action.
                         `;
@@ -363,8 +368,13 @@
                             generationConfig: {
                                 responseMimeType: "application/json",
                                 responseSchema: {
-                                    type: "ARRAY",
-                                    items: { type: "STRING" }
+                                    type: "OBJECT",
+                                    properties: {
+                                        descriptions: {
+                                            type: "ARRAY",
+                                            items: { type: "STRING" }
+                                        }
+                                    }
                                 }
                             }
                         };
@@ -384,8 +394,8 @@
                         const jsonText = result?.candidates?.[0]?.content?.parts?.[0]?.text;
                         if (jsonText) {
                             const parsedJson = JSON.parse(jsonText);
-                            if (Array.isArray(parsedJson)) {
-                                descriptions = parsedJson;
+                            if (parsedJson.descriptions && Array.isArray(parsedJson.descriptions)) {
+                                descriptions = parsedJson.descriptions;
                                 break;
                             }
                         }
