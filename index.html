@@ -270,7 +270,7 @@
                 for (let i = 0; i < maxRetries; i++) {
                     try {
                         const prompt = `
-                            Generate a JSON array containing 10 creative and effective YouTube titles. Each title must:
+                            Generate a JSON object with a "titles" array containing 10 creative and effective YouTube titles. Each title must:
                             - Be under 70 characters long.
                             - Include the exact primary keyword: "${primaryKeyword}".
                             - Have a strong hook.
